@@ -4,6 +4,8 @@ import os
 import re
 from openpyxl import Workbook
 from openpyxl.styles import Alignment
+import git
+from git import Repo
 
 def git_pull(repo_path):
     # Change directory to the local repository
@@ -15,6 +17,23 @@ def git_pull(repo_path):
 
     # Pull the latest changes from the remote repository
     subprocess.run(["git", "pull"], cwd=repo_path)
+    return True
+
+def git_push(repo_path):
+    # Change directory to the local repository
+    try:
+        repo = Repo(repo_path)
+    except git.InvalidGitRepositoryError:
+        print(f"Error: The specified path '{repo_path}' is not a Git repository.")
+        return False
+
+    # Add and commit the changes
+    repo.git.add(update=True)
+    repo.index.commit("Update merge commit details")
+
+    # Push the changes to the remote repository
+    repo.remotes.origin.push()
+
     return True
 
 def get_merge_commit_details(repo_path, pull_request_branch):
@@ -43,7 +62,7 @@ def parse_merge_commit_details(details):
     return parsed_details
 
 def find_pr_link(message):
-    # Find GitHub pull request URL in the commit message using specific pattern
+    # Find GitHub pull request URL in the commit message using a specific pattern
     pr_number_match = re.search(r'#(\d+)', message)
     if pr_number_match:
         pr_number = pr_number_match.group(1)
@@ -94,9 +113,16 @@ def export_to_excel(merge_commit_details, excel_path):
 repo_path = r'C:\Users\stephani.choi\DDE\LOOKML_one_hub'  # Replace with the actual path to your local Git repository
 pull_request_branch = 'pull_request_branch'  # Replace with the actual pull request branch name
 excel_path = r'C:\Users\stephani.choi\Documents\hub-git-log\merge_commit_details.xlsx'  # Replace with the desired Excel file path
+export_path = r'C:\Users\stephani.choi\Documents\hub-git-log'  # Replace with the desired Excel file path
 
 merge_commit_details_raw = get_merge_commit_details(repo_path, pull_request_branch)
 
 if merge_commit_details_raw:
     merge_commit_details_parsed = parse_merge_commit_details(merge_commit_details_raw)
     export_to_excel(merge_commit_details_parsed, excel_path)
+
+    # Push the changes to the GitHub repository
+    if git_push(export_path):
+        print("Excel sheet pushed to GitHub repository.")
+    else:
+        print("Failed to push the Excel sheet to GitHub repository.")
