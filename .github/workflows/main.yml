@@ -1,0 +1,23 @@
+name: Run Python Script
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.x  # Replace 'x' with the desired Python version
+
+    - name: Run Python Script
+      run: |
+        python your_script.py  # Replace 'your_script.py' with the actual filename
