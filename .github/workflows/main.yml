@@ -16,8 +16,8 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'  # Replace 'x' with the desired Python version
+        python-version: '3.x'  # Use the latest minor version of Python 3
 
     - name: Run Python Script
       run: |
-        python Git Log.py  # Replace 'your_script.py' with the actual filename
+        python "Git Log.py"  # Enclose the filename in quotes
