@@ -93,7 +93,7 @@ def export_to_excel(merge_commit_details, excel_path):
 # Example usage
 repo_path = r'C:\Users\stephani.choi\DDE\LOOKML_one_hub'  # Replace with the actual path to your local Git repository
 pull_request_branch = 'pull_request_branch'  # Replace with the actual pull request branch name
-excel_path = r'C:\Users\stephani.choi\Documents\merge_commit_details.xlsx'  # Replace with the desired Excel file path
+excel_path = r'C:\Users\stephani.choi\Documents\hub-git-log\merge_commit_details.xlsx'  # Replace with the desired Excel file path
 
 merge_commit_details_raw = get_merge_commit_details(repo_path, pull_request_branch)
 
